@@ -1,0 +1,146 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.form-container,
+.promo-container {
+    flex: 1;
+    margin: 0 10px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+h1,
+h2,
+h3 {
+    color: #333;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    /* Smooth transition */
+}
+
+input[type="text"]:focus,
+select:focus {
+    border-color: #110952;
+    /* Change border color to blue */
+    box-shadow: 0 0 6px #110952;
+    /* Add blue box shadow */
+    outline: none;
+    /* Remove default outline */
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.promo-container {
+    font-family: 'Inter', sans-serif;
+    color: rgb(153, 153, 153);
+    text-align: left;
+}
+
+.promo-container h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.promo-code {
+    display: block;
+    padding: 10px;
+    border: 1px solid #686666;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.promo-code:hover {
+    background-color: #f0f0f0;
+}
+
+.promo-code h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.promo-code p {
+    font-size: 14px;
+    font-weight: 400;
+    margin: 5px 0 0;
+}
+
+.details-section {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.details-section h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.detail-item label {
+    font-weight: bold;
+    color: #555;
+}
+
+.detail-item span {
+    color: #777;
+}
+
+.pay-btn{
+    margin-top: 10px;
+}

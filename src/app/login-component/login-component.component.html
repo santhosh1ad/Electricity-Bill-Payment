@@ -1,0 +1,28 @@
+<div *ngIf="showModal" id="accountModal" class="modal">
+    <div class="modal-content">
+        <h2 class="">Account Verification</h2>
+        <form [formGroup]="LoginForms" (ngSubmit)="onSubmit()">
+            <div class="input-group">
+                <label for="customerId">Customer ID</label>
+                <input id="customerId" formControlName="customer_Id" placeholder="Enter your Customer ID" />
+                <span *ngIf="isCusId" class="error-message">Invalid Customer ID</span>
+            </div>
+
+            <div *ngIf="showOtp" class="input-group">
+                <label for="otp">OTP</label>
+                <input id="otp" formControlName="otp" placeholder="Enter the OTP" />
+                <span *ngIf="isErr" class="error-message">Invalid OTP</span>
+            </div>
+
+            <div class="button-group">
+                <button type="button" (click)="getInfo()" [disabled]="isLoading" *ngIf="!showOtp">
+                    <!-- Show loading text while isLoading is true -->
+                    <ng-container *ngIf="isLoading; else submitText">Loading...</ng-container>
+                    <ng-template #submitText>Submit</ng-template>
+                </button>
+
+                <button type="button" (click)="validateOtp()" *ngIf="showOtp">Validate OTP</button>
+            </div>
+        </form>
+    </div>
+</div>

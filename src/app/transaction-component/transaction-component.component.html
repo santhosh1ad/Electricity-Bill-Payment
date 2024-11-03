@@ -1,0 +1,55 @@
+<div class="transaction-container">
+    <h2>All Transactions</h2>
+
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="loader-container">
+        <div class="electricity-loader">
+            <div class="bolt"></div>
+        </div>
+    </div>
+
+    <!-- If there are transactions, display the table -->
+    <table class="transaction-table" *ngIf="!loading && paginatedTransactions.length > 0">
+        <thead>
+            <tr>
+                <th>S No</th>
+                <th>ID</th>
+                <th>Customer ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>MOP</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let transaction of paginatedTransactions; let i = index"
+                (click)="redirectToTransaction(transaction.referenceNumber)">
+                <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td> <!-- Serial number calculation -->
+                <td>{{ transaction.id }}</td>
+                <td>{{ transaction.customerId }}</td>
+                <td>{{ transaction.amount }}</td>
+
+                <!-- Status with symbols -->
+                <td>
+                    <span *ngIf="transaction.status === 'SUCCESS'" class="status success">
+                        &#10004; <!-- Check mark symbol -->
+                    </span>
+                    <span *ngIf="transaction.status === 'FAILED'" class="status failure">
+                        &#10060; <!-- Cross mark symbol -->
+                    </span>
+                    {{ transaction.status }}
+                </td>
+
+                <td>{{ transaction.transactionDate | date: 'short' }}</td>
+                <td>{{ transaction.mop }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination Section -->
+    <div class="pagination" *ngIf="!loading">
+        <button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+    </div>
+</div>

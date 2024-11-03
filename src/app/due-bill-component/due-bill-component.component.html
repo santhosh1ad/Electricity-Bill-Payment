@@ -1,0 +1,49 @@
+<div class="due-bills-container">
+    <h2>Your Due Bills</h2>
+
+    <div *ngIf="loading" class="loader-container">
+        <div class="electricity-loader">
+            <div class="bolt"></div>
+        </div>
+    </div>
+
+    <table *ngIf="!loading && dueBills.length > 0">
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" (change)="toggleSelectAll($event)" /> Select All
+                </th>
+                <th>ID</th>
+                <th>Bill Customer ID</th>
+                <th>Amount</th>
+                <th>Bill Generated Date</th>
+                <th>Due Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let bill of dueBills; let i = index">
+                <td>
+                    <input type="checkbox" [(ngModel)]="bill.selected" (change)="toggleBillSelection(i)" />
+                </td>
+                <td>{{ bill.id }}</td>
+                <td>{{ bill.customerId }}</td>
+                <td>{{ bill.amt }}</td>
+                <td>{{ bill.billGeneratedDate }}</td>
+                <td>{{ bill.dueDate }}</td>
+                <td>
+                    <button class="pay-btn" (click)="payBill(bill.id)">Pay</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="!loading && dueBills.length === 0" class="no-bills">
+        <p>No due bills available at the moment.</p>
+        <img src="assets/empty.png" alt="No Bills" class="no-bills-img" />
+    </div>
+
+    <button *ngIf="!loading && dueBills.length !== 0" class="pay-selected-btn" (click)="sendSelectedBills()">
+        Pay Selected Bills
+    </button>
+</div>

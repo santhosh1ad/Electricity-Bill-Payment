@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Information</title>
+    <!-- Uncomment to link external styles -->
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+</head>
+
+<body>
+    <div class="container">
+
+        <form>
+            <div class="row">
+                <!-- Payment Section -->
+                <div class="payment-section col">
+                    <h3 class="title">Account Details</h3>
+
+                    <nav class="navbar">
+                        <ul class="radio-group">
+                            <li (click)="selectPaymentMethod('Credit/Debit')"
+                                [class.active]="selectedPaymentMethod === 'Credit/Debit'">
+                                <label>
+                                    <input type="radio" name="paymentMethod"
+                                        [checked]="selectedPaymentMethod === 'Credit/Debit'" />
+                                    Credit/Debit
+                                </label>
+                            </li>
+                            <li (click)="selectPaymentMethod('UPI')" [class.active]="selectedPaymentMethod === 'UPI'">
+                                <label>
+                                    <input type="radio" name="paymentMethod"
+                                        [checked]="selectedPaymentMethod === 'UPI'" />
+                                    UPI
+                                </label>
+                            </li>
+                            <li (click)="selectPaymentMethod('Wallet')"
+                                [class.active]="selectedPaymentMethod === 'Wallet'">
+                                <label>
+                                    <input type="radio" name="paymentMethod"
+                                        [checked]="selectedPaymentMethod === 'Wallet'" />
+                                    Wallet
+                                </label>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div *ngIf="selectedPaymentMethod === 'Credit/Debit'" [formGroup]="AccountDetails">
+                        <div class="inputBox">
+                            <label for="acc_num">Account Number:</label>
+                            <input type="text" id="acc" formControlName="acc_num"
+                                placeholder="Enter your account number" required (input)="formatAccountNumber($event)"
+                                [disabled]="isVerified" />
+                        </div>
+
+                        <div class="row-inline">
+                            <div class="inputBox-inline">
+                                <label for="cvv">CVV:</label>
+                                <input type="text" id="cvv" formControlName="cvv" placeholder="Enter CVV" required
+                                    [disabled]="isVerified" />
+                            </div>
+
+                            <div class="inputBox-inline">
+                                <label for="expiryMonth">Expiry Month:</label>
+                                <select id="expiryMonth" formControlName="expiryMonth" required [disabled]="isVerified">
+                                    <option value="">Choose month</option>
+                                    <option *ngFor="let month of months" [value]="month.value">{{ month.label }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="inputBox-inline">
+                                <label for="expiryYear">Expiry Year:</label>
+                                <select id="expiryYear" formControlName="expiryYear" required [disabled]="isVerified">
+                                    <option value="">Choose Year</option>
+                                    <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UPI Payment Details -->
+                    <div *ngIf="selectedPaymentMethod === 'UPI'" [formGroup]="UPIDetails">
+                        <div class="inputBox">
+                            <label for="upiId">UPI ID:</label>
+                            <input type="text" id="upiId" formControlName="upiId" placeholder="Enter your UPI ID"
+                                required [disabled]="isVerified" />
+                        </div>
+                    </div>
+
+                    <!-- Wallet Payment Details -->
+                    <div *ngIf="selectedPaymentMethod === 'Wallet'">
+                        <div *ngIf="loading; else walletDetails">
+                            <!-- Custom Loading Spinner -->
+                            <div class="loading-spinner">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Fetching Wallet Details...</span>
+                                </div>
+                                <p>Fetching Wallet Details...</p>
+                            </div>
+                        </div>
+                        <!-- Wallet Details -->
+                        <ng-template #walletDetails>
+                            <div *ngIf="walletAmount !== null">
+                                <p [ngStyle]="{'color': walletAmount < dueBills[0].amt ? 'red' : 'green'}">
+                                    Wallet Amount: {{ walletAmount | currency: 'INR' }}
+                                </p>
+                                <button *ngIf="walletAmount === -1 || walletAmount < dueBills[0].amt"
+                                    class="recharge-button" (click)="rechargeWallet()">Recharge Wallet</button>
+                                <button *ngIf="walletAmount >= dueBills[0].amt && !walletPay" class="submit_btn"
+                                    (click)="makePaymentWallet()">Pay with Wallet</button>
+                                <div *ngIf="walletPay" class="spinner-border" role="status">
+                                    <span class="visually-hidden">Fetching </span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+
+                    <!-- Verify Payment Details buttons -->
+                    <button *ngIf="selectedPaymentMethod === 'Credit/Debit' && !isVerified" type="button"
+                        (click)="verifybank()" class="verify_btn" [disabled]="isVerifying">
+                        <span *ngIf="!isVerifying">Verify Payment Details</span>
+                        <span *ngIf="isVerifying" class="loading-spinner">Verifying...</span>
+                    </button>
+                    <span *ngIf="NoAccount" style="color:red">Invalid Account</span>
+
+                    <button *ngIf="selectedPaymentMethod === 'UPI' && !isVerified" type="button" (click)="verifyUpi()"
+                        class="verify_btn" [disabled]="isVerifying">
+                        <span *ngIf="!isVerifying">Verify Payment Details</span>
+                        <span *ngIf="isVerifying">Verifying...</span>
+                    </button>
+                    <span *ngIf="NoUpi" style="color:red">Invalid UPI ID</span>
+                </div>
+
+                <!-- Bill Details Section -->
+                <div class="bill-details-container col">
+                    <h3 class="bill-title">Bill Details</h3>
+                    <div class="bill-detail">
+                        <div class="bill-item">
+                            <span class="label">Customer Name:</span>
+                            <span class="value">{{ dueBills[0].user.name }}</span>
+                        </div>
+                        <div class="bill-item">
+                            <span class="label">Bill Generated Date:</span>
+                            <span class="value">{{ dueBills[0].billGeneratedDate | date }}</span>
+                        </div>
+                        <div class="bill-item">
+                            <span class="label">Due Date:</span>
+                            <span class="value">{{ dueBills[0].dueDate | date }}</span>
+                        </div>
+                        <div class="bill-item">
+                            <span class="label">Bill Amount:</span>
+                            <span class="value">{{ dueBills[0].amt | currency: 'INR' }}</span>
+                        </div>
+                        <div class="discount-applied">
+                            <div class="label">Discount Applied:</div>
+                            <div class="value">{{discountPercentage}}%</div>
+                        </div>
+
+                    </div>
+                    <div class="bill-item">
+                        <span class="label">Total Amount:</span>
+                        <span class="value total-amount">{{ calculateTotal() | currency: 'INR' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OTP Verification Section -->
+            <div *ngIf="isVerified" [formGroup]="Payment">
+                <h3 class="title">OTP Verification</h3>
+                <div class="inputBox">
+                    <label for="Otp">Enter OTP:</label>
+                    <input type="text" formControlName="Otp" placeholder="Enter OTP" required />
+                </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <button *ngIf="selectedPaymentMethod === 'Credit/Debit' && isVerified" type="button" (click)="makePayment()"
+                class="submit_btn" [disabled]="isPaying">
+                <span *ngIf="!isPaying">Pay</span>
+                <span *ngIf="isPaying">Processing...</span>
+            </button>
+
+            <button *ngIf="selectedPaymentMethod === 'UPI' && isVerified" type="button" (click)="makeUpiPayment()"
+                class="submit_btn" [disabled]="isPaying">
+                <span *ngIf="!isPaying">Pay</span>
+                <span *ngIf="isPaying">Processing...</span>
+            </button>
+
+            <button *ngIf="selectedPaymentMethod === 'Wallet' && isVerified" type="button" (click)="makePaymentWallet()"
+                class="submit_btn" [disabled]="isPaying">
+                <span *ngIf="!isPaying">Pay</span>
+                <span *ngIf="isPaying">Processing...</span>
+            </button>
+        </form>
+
+        <div *ngIf="paymentStatus" [ngClass]="paymentStatusType">{{ paymentStatus }}</div>
+    </div>
+</body>
+
+</html>

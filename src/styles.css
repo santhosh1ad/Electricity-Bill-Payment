@@ -1,1 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
+/* Content Section */
+.content {
+    padding: 30px;
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: #f5fffa  rgb(245, 255, 250)
+    /* Removed box-shadow, border-radius, and margin to eliminate the box effect */
+}
+
+.content h1,
+.content h2,
+.content h3 {
+    color: var(--primary-color);
+}
+
+.content p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+}
+
+body.modal-open {
+    overflow: hidden;
+}

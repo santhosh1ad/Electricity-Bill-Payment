@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="form-container">
+        <h2>Pay Electricity Bill</h2>
+        <form [formGroup]="PayBill">
+            <div class="form-group">
+                <label for="customerId">Customer ID:</label>
+                <input type="text" id="customerId" formControlName="customer_Id">
+                <br><span *ngIf="isError" class="error-text">Invalid customer Id</span>
+            </div>
+
+            <div class="details-section" *ngIf="showDetails && GetbillDetails.length > 0">
+                <h2>Consumer Details</h2>
+                <div class="detail-item" *ngIf="ShowName">
+                    <label>Owner Name:</label>
+                    <span>{{ GetbillDetails[0].user.name }}</span>
+                </div>
+                <div class="detail-item" *ngIf="Showamt">
+                    <label>Amount:</label>
+                    <span>{{ GetbillDetails[0].amt }}</span>
+                </div>
+                <div class="detail-item" *ngIf="Showamt">
+                    <label>Due Date:</label>
+                    <span>{{ GetbillDetails[0].dueDate }}</span>
+                </div>
+            </div>
+
+            <button *ngIf="!Pay" type="submit" class="proceed-btn" (click)="getInfo()">Proceed</button>
+            <button *ngIf="Pay" type="submit" class="pay-btn" (click)="redirect()">Pay</button>
+            <p *ngIf="notFound">Sorry No pending Due bills for this connection Id</p>
+        </form>
+    </div>
+
+    <div class="promo-container">
+        <h2>Discount Details</h2>
+
+        <div class="promo-code" *ngIf="payEarlyOffer">
+            <h3>PAY EARLY</h3>
+            <p>Get 5% off on Bill</p>
+        </div>
+
+        <div class="promo-code">
+            <h3>BBCPLAY</h3>
+            <p>Get 5% off on Bill by using online payment</p>
+        </div>
+    </div>
+</div>

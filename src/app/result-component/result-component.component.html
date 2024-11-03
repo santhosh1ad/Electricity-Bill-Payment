@@ -1,0 +1,56 @@
+<div class="container">
+    <div class="header" *ngIf="!loading">
+        <h2>Payment Status</h2>
+        <p id="paymentStatus"></p>
+        <button (click)="redirect()">Make Another Payment</button>
+    </div>
+
+    <div *ngIf="loading" class="loading">
+        <p>Loading...</p>
+        <div class="spinner"></div> <!-- Add a spinner here -->
+    </div>
+
+    <div *ngIf="!loading && transaction.length > 0" class="content">
+        <div class="details"
+            [ngClass]="{'success': transaction[0].status === 'SUCCESS', 'failure': transaction[0].status !== 'SUCCESS'}">
+            <div class="status-icon">
+                <span *ngIf="transaction[0].status === 'SUCCESS'" class="icon tick">✔️</span>
+                <span *ngIf="transaction[0].status !== 'SUCCESS'" class="icon cross">❌</span>
+            </div>
+            <h3>Bill Payment Details</h3>
+            <p class="status">
+                Payment Status: <span>{{ transaction[0].status }}</span>
+            </p>
+
+            <p *ngIf="transaction[0].status === 'SUCCESS'">Payment of <span>{{ transaction[0].amount }}</span> received
+                by BBC</p>
+            <p *ngIf="transaction[0].status !== 'SUCCESS'">Payment of <span>{{ transaction[0].amount }}</span> not
+                received by BBC</p>
+            <p>Payment ID: <span>{{ transaction[0].referenceNumber }}</span></p>
+            <p>Bill Amount: <span>{{ transaction[0].amount }}</span></p>
+            <p><i>{{ transaction[0].transactionDate }}</i></p>
+        </div>
+
+        <div class="summary">
+            <h3>Payment Summary</h3>
+            <p>Bill Status: <span>{{ transaction[0].status }}</span></p>
+            <p>Bill Payment of <span>{{ transaction[0].customer }}</span></p>
+            <p>Transaction ID: <span>{{ transaction[0].id }}</span></p>
+            <table>
+                <tr>
+                    <td>Amount</td>
+                    <td><span>{{ transaction[0].amount }}</span></td>
+                </tr>
+                <tr>
+                    <td>Processing Fee</td>
+                    <td>₹0.00</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td><span>{{ transaction[0].amount }}</span></td>
+                </tr>
+            </table>
+            <button *ngIf="transaction[0].status !== 'FAILED'" (click)="downloadPdf()">Download Receipt as PDF</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="bill-container">
+    <!-- Bill ID List Section (Left Side) -->
+    <div class="bill-id-list">
+        <h2>Select a Bill</h2>
+        <ul>
+            <li (click)="selectBill(bill)" [class.selected]="bill.id === selectedBill?.id"
+                *ngFor="let bill of selectedBills">
+                <span>Bill ID: {{ bill.id }}</span>
+                <span>{{ bill.amt | currency:'INR' }}</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Bill Details and UPI Payment Section (Right Side) -->
+    <div class="details-upi-container">
+        <!-- Bill Details (Visible when a bill is selected) -->
+        <div *ngIf="selectedBill" class="bill-details">
+            <h3>Bill Details</h3>
+            <p><strong>Customer Name: </strong> {{ customerName }}</p>
+            <p><strong>Bill Generated Date: </strong> {{ selectedBill.billGeneratedDate | date:'shortDate' }}</p>
+            <p><strong>Due Date: </strong> {{ selectedBill.dueDate | date:'shortDate' }}</p>
+            <p><strong>Bill Amount:</strong> {{ selectedBill.amt | currency:'INR' }}</p>
+            <p><strong>Discount Applied: </strong> {{ discountPercentage }}</p>
+            <p><strong>Total Amount: </strong> {{ totalAmount | currency:'INR'}}</p>
+        </div>
+
+
+        <div *ngIf="!selectedBill" class="bill-details">
+            <h3>Please select a bill to see the details.</h3>
+        </div>
+
+
+        <div class="upi-payment">
+            <label for="upiId">Enter UPI ID:</label>
+            <input type="text" id="upiId" [(ngModel)]="UPI" placeholder="Enter UPI ID" />
+
+            <button *ngIf="!isUpiVerified && !isLoading" (click)="verifyUpi()">Verify</button>
+
+            <div *ngIf="isLoading" class="loader">Verifying...</div>
+        </div>
+
+        <div *ngIf="isUpiVerified" class="otp-section">
+            <label for="otp">Enter OTP:</label>
+            <input type="text" id="otp" [(ngModel)]="OTP" placeholder="Enter OTP" />
+            <button *ngIf="!enablePay && isUpiVerified" (click)="verifyOtp()">Verify OTP</button>
+            <button *ngIf="enablePay && !paymentProcessing" (click)="makeBulkPayment()">Proceed to
+                Payment</button>
+            <button *ngIf="paymentProcessing">Processing...</button>
+        </div>
+    </div>
+</div>

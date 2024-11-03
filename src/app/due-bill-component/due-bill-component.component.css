@@ -1,0 +1,178 @@
+/* Loader styling */
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.electricity-loader {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #0A74DA;
+    animation: spin 1.5s linear infinite;
+}
+
+.bolt {
+    position: absolute;
+    top: 8px;
+    left: 18px;
+    width: 12px;
+    height: 28px;
+    background-color: #FFD700;
+    /* Electric bolt color (gold) */
+    clip-path: polygon(50% 0%, 100% 50%, 75% 50%, 100% 100%, 50% 75%, 0% 100%, 25% 50%, 0% 50%);
+    animation: flash 0.5s ease-in-out infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes flash {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Rest of the styles... */
+.due-bills-container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+.due-bills-container h2 {
+    text-align: center;
+    color: #0A74DA;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+thead th {
+    background-color: #0A74DA;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.pay-btn {
+    background-color: #0A74DA;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pay-btn:hover {
+    background-color: #055aa3;
+}
+
+.no-bills {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.no-bills p {
+    font-size: 16px;
+    color: #666666;
+}
+
+.no-bills-img {
+    width: 150px;
+    margin-top: 10px;
+    opacity: 0.8;
+    border-radius: 12px;
+}
+
+.pay-selected-btn {
+    background-color: #4CAF50;
+    /* Green background */
+    color: white;
+    /* White text color */
+    border: none;
+    /* No border */
+    padding: 15px 30px;
+    /* Padding for size */
+    text-align: center;
+    /* Center text */
+    text-decoration: none;
+    /* No underline */
+    display: inline-block;
+    /* Inline-block for proper spacing */
+    font-size: 16px;
+    /* Font size */
+    border-radius: 5px;
+    /* Rounded corners */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    /* Smooth transition */
+}
+
+.pay-selected-btn:hover {
+    background-color: #45a049;
+    /* Darker green on hover */
+    transform: scale(1.05);
+    /* Slightly increase size on hover */
+}
+
+.pay-selected-btn:active {
+    background-color: #39843c;
+    /* Even darker green when pressed */
+    transform: scale(0.95);
+    /* Slightly decrease size when pressed */
+}
+
+.pay-selected-btn:disabled {
+    background-color: #ccc;
+    /* Grey background when disabled */
+    color: #666;
+    /* Grey text color */
+    cursor: not-allowed;
+    /* Not-allowed cursor */
+}

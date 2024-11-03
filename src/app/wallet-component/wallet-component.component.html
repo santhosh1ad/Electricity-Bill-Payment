@@ -1,0 +1,85 @@
+<div class="wallet-container">
+    <div class="spinner-grow" role="status" *ngIf="isLoading">
+        <span class="sr-only">Loading...</span>
+    </div>
+
+    <div class="wallet-card" *ngIf="!isLoading">
+        <h2 class="wallet-title">My Wallet</h2>
+
+        <div class="balance-section">
+            <p class="balance-label">Current Balance</p>
+            <p class="balance-amount">₹ {{ balanceAmount }}</p>
+        </div>
+
+        <div class="amount-input">
+            <label for="rechargeAmount">Enter Amount:</label>
+            <input id="rechargeAmount" [(ngModel)]="rechargeAmount" [disabled]="!isRechargeAmountEditable"
+                class="form-control" placeholder="Enter amount" />
+        </div>
+
+        <button class="recharge-btn" (click)="initiateRecharge()" *ngIf="!rechargeInitiated">
+            Recharge
+        </button>
+
+        <div *ngIf="rechargeInitiated && showRechargeOptions" class="recharge-options">
+            <h3>Select Recharge Method:</h3>
+            <div class="payment-buttons">
+                <button class="payment-btn bank-btn" (click)="selectPaymentMethod('bank')">Bank</button>
+                <button class="payment-btn upi-btn" (click)="selectPaymentMethod('upi')">UPI</button>
+            </div>
+        </div>
+
+        <div *ngIf="selectedPaymentMethod === 'bank'" class="bank-form">
+            <h3>Enter Card Details</h3>
+            <form [formGroup]="AccountDetails">
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" formControlName="acc_num" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" formControlName="cvv" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="expiryMonth">Expiry Month</label>
+                    <input type="text" id="expiryMonth" formControlName="expiryMonth" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="expiryYear">Expiry Year</label>
+                    <input type="text" id="expiryYear" formControlName="expiryYear" class="form-control" required />
+                </div>
+                <button type="button" (click)="verifyBank()" class="submit-btn" *ngIf="!verifyBankClicked">Verify Bank
+                    Details</button>
+                    <button type="button" *ngIf="goBack" (click)="goBack()" class="back-btn">Back to Account</button>
+            </form>
+        </div>
+
+        <div *ngIf="selectedPaymentMethod === 'upi'" class="upi-form">
+            <h3>Enter UPI ID</h3>
+            <form [formGroup]="UPIDetails">
+                <div class="form-group">
+                    <label for="upiId">UPI ID</label>
+                    <input type="text" id="upiId" formControlName="upiId" class="form-control" required />
+                </div>
+                <button type="button" (click)="verifyUpi()" class="submit-btn" *ngIf="!verifyUpiClicked">Verify UPI
+                    Details</button>
+            </form>
+        </div>
+
+        <div class="otp-container"
+            *ngIf="submit && (selectedPaymentMethod === 'bank' || selectedPaymentMethod === 'upi')">
+            <h3>Enter OTP</h3>
+            <div class="form-group">
+                <label for="otp">OTP:</label>
+                <input type="text" id="otp" [(ngModel)]="otp" class="form-control" required
+                    placeholder="Enter the OTP" />
+            </div>
+            <button type="button" (click)="makeRecharge()" [disabled]="!isRechargeEnabled"
+                class="submit-btn">Submit</button>
+            <button type="button" (click)="goBack()" class="back-btn">Back to Account</button>
+            <button type="button" (click)="cancel()" class="cancel-btn">Cancel</button>
+        </div>
+    </div>
+
+    <p *ngIf="noWallet" class="no-wallet-msg">No wallet found. Please create one.</p>
+</div>
